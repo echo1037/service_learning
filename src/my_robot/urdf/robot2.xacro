@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="my_robot">
+
+    <!-- 1. 定义全局参数（方便后续统一修改尺寸） -->
+    <xacro:property name="chassis_length" value="0.5"/>
+    <xacro:property name="chassis_width" value="0.3"/>
+    <xacro:property name="chassis_height" value="0.1"/>
+    <xacro:property name="wheel_radius" value="0.05"/>
+    <xacro:property name="wheel_thickness" value="0.02"/>
+
+    <!-- 2. 引入各个子模块 -->
+    <xacro:include filename="$(find my_robot)/urdf/robot_core.xacro"/>
+    <xacro:include filename="$(find my_robot)/urdf/camera.xacro"/>
+    <!-- 暂时去掉激光雷达，便于排查底盘运动 -->
+    <!-- <xacro:include filename="$(find my_robot)/urdf/lidar.xacro"/> -->
+    <xacro:include filename="$(find my_robot)/urdf/plugins/gazebo_control.xacro"/>
+    
+</robot>

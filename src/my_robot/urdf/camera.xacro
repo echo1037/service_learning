@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="${chassis_length / 2} 0 ${chassis_height / 2}" rpy="0 0 0"/>
+    </joint>
+
+    <link name="camera_link">
+        <visual>
+            <geometry><box size="0.02 0.05 0.02"/></geometry>
+            <material name="blue"><color rgba="0 0 1 1.0"/></material>
+        </visual>
+        <collision><geometry><box size="0.02 0.05 0.02"/></geometry></collision>
+        <inertial>
+            <mass value="0.1"/>
+            <inertia ixx="0.0001" ixy="0" ixz="0" iyy="0.0001" iyz="0" izz="0.0001"/>
+        </inertial>
+    </link>
+
+    <!-- Gazebo 相机插件 -->
+    <gazebo reference="camera_link">
+        <material>Gazebo/Blue</material>
+        <sensor name="camera_sensor" type="camera">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>true</visualize>
+            <update_rate>30.0</update_rate>
+            <camera name="head">
+                <horizontal_fov>1.047</horizontal_fov>
+                <image>
+                    <width>640</width>
+                    <height>480</height>
+                    <format>R8G8B8</format>
+                </image>
+                <clip>
+                    <near>0.1</near>
+                    <far>100</far>
+                </clip>
+            </camera>
+            <!-- 桥接到 ROS 2 -->
+            <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+                <ros>
+                    <remapping>~/image_raw:=/camera/image_raw</remapping>
+                    <remapping>~/camera_info:=/camera/camera_info</remapping>
+                </ros>
+                <camera_name>camera</camera_name>
+                <frame_name>camera_link</frame_name>
+            </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>
